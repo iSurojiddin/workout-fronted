@@ -8,13 +8,13 @@
             <div class="ml-2 grow text-lg font-semibold text-gray-900">IT-Forelead</div>
           </div>
           <div class="mb-5 flex flex-1 flex-col justify-center">
-            <h3 class="text-center text-4xl font-semibold">SMS-PLATFORM</h3>
+            <h3 class="text-center text-4xl font-semibold">WORKOUT</h3>
             <p class="my-5 px-10 text-center text-sm text-gray-500">Mijozlaringizni tug'ilgan kunlarida va bayramlarda hech qanday vaqt sarflamasdan avtamatik tarizda tabriklang!</p>
             <div class="mt-8 w-full">
               <Form @submit="onSubmit" :validation-schema="schema" class="form-horizontal mx-auto w-3/4" method="POST" action="#">
                 <div class="mt-4 flex flex-col">
-                  <Field v-model="email" name="email" type="email" class="text-md w-full rounded-xl border-0 bg-gray-100 p-4 text-gray-500 outline-none focus:bg-gray-200 focus:outline-none" placeholder="Emailni kiriting..." />
-                  <ErrorMessage name="email" class="error-feedback font-medium text-rose-600" />
+                  <Field v-model="phone" name="phone" type="text" class="text-md w-full rounded-xl border-0 bg-gray-100 p-4 text-gray-500 outline-none focus:bg-gray-200 focus:outline-none" placeholder="Telefon raqamni kiriting..." />
+                  <ErrorMessage name="phone" class="error-feedback font-medium text-rose-600" />
                 </div>
                 <div class="mt-4 flex flex-col">
                   <Field v-model="password" name="password" type="password" class="text-md w-full rounded-xl border-0 bg-gray-100 p-4 text-gray-500 outline-none focus:bg-gray-200 focus:outline-none" placeholder="Parolni kiriting..." />
@@ -58,11 +58,11 @@ const router = useRouter()
 
 const store = useStore()
 
-const email = ref('')
+const phone = ref('')
 const password = ref('')
 
 const schema = yup.object().shape({
-  email: yup.string().required('Iltimos. Emailni kitiring!'),
+  phone: yup.string().required('Iltimos. Telefon raqamni kitiring!'),
   password: yup.string().required('Iltimos. Parolni kitiring!'),
 })
 
@@ -70,28 +70,19 @@ function checkLogin(data) {
   store.commit('setLogin', data)
 }
 
-const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i //email regex
-
 const onSubmit = (user) => {
-  if (!regex.test(user.email)) {
-    iziToast.warning({
-      message: "Iltimos, to'g'ri email kiriting! Masalan namuna@misol.uz",
-      position: 'topRight',
-    })
-  } else {
-    store.dispatch('auth/login', user).then(
-      () => {
-        router.push('/')
-        checkLogin(true)
-      },
-      (error) => {
-        iziToast.error({
-          message: "Email toki parol noto'g'ri!",
-          position: 'topRight',
-        })
-      }
-    )
-  }
+  store.dispatch('auth/login', user).then(
+    () => {
+      router.push('/')
+      checkLogin(true)
+    },
+    (error) => {
+      iziToast.error({
+        message: "Telefon yoki parol noto'g'ri!",
+        position: 'topRight',
+      })
+    }
+  )
 }
 </script>
 
